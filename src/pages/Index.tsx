@@ -1,13 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { useCart } from '@/hooks/use-cart';
+import CartSidebar from '@/components/CartSidebar';
 
 const Index = () => {
+  const { addItem, openCart, getTotalItems } = useCart();
+  
   const products = [
     {
       id: 1,
       name: 'Кружка',
       price: '990₽',
+      priceNumber: 990,
       image: 'img/8bfab1c0-4d9c-4d1e-8a64-3c89d312b548.jpg',
       category: 'Посуда'
     },
@@ -15,6 +20,7 @@ const Index = () => {
       id: 2,
       name: 'Футболка',
       price: '1490₽',
+      priceNumber: 1490,
       image: 'img/b589d4ed-5d12-4960-84ff-34ffd03de58a.jpg',
       category: 'Одежда'
     },
@@ -22,6 +28,7 @@ const Index = () => {
       id: 3,
       name: 'Бутылка',
       price: '1290₽',
+      priceNumber: 1290,
       image: 'img/58308ebe-7220-4c20-9178-369c0252382d.jpg',
       category: 'Аксессуары'
     }
@@ -49,8 +56,16 @@ const Index = () => {
             <a href="#gallery" className="hover:text-coral transition-colors">Галерея</a>
             <a href="#delivery" className="hover:text-coral transition-colors">Доставка</a>
           </nav>
-          <Button className="bg-gradient-to-r from-coral to-mint text-white hover:scale-105 transition-transform">
-            <Icon name="Menu" size={20} />
+          <Button 
+            onClick={openCart}
+            className="bg-gradient-to-r from-coral to-mint text-white hover:scale-105 transition-transform relative"
+          >
+            <Icon name="ShoppingCart" size={20} />
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-sunny text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {getTotalItems()}
+              </span>
+            )}
           </Button>
         </div>
       </header>
@@ -102,7 +117,10 @@ const Index = () => {
                   <h3 className="font-rubik font-semibold text-xl mb-3">{product.name}</h3>
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-2xl text-coral">{product.price}</span>
-                    <Button className="bg-gradient-to-r from-coral to-mint text-white hover:scale-105 transition-transform">
+                    <Button 
+                      onClick={() => addItem(product)}
+                      className="bg-gradient-to-r from-coral to-mint text-white hover:scale-105 transition-transform"
+                    >
                       Настроить
                     </Button>
                   </div>
@@ -219,6 +237,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      
+      <CartSidebar />
     </div>
   );
 };
